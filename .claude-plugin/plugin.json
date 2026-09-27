@@ -1,0 +1,12 @@
+{
+  "name": "clinical-trial-forecast",
+  "version": "0.1.0",
+  "description": "Study, scenario, biosample, workforce and public trial workflows for Clinical Trial Forecast.",
+  "homepage": "https://clinicaltrialforecast.com",
+  "author": {
+    "name": "CTFBio, LLC",
+    "url": "https://clinicaltrialforecast.com"
+  },
+  "license": "Apache-2.0",
+  "repository": "https://github.com/ctfbio/clinical-trial-forecast-plugin"
+}
