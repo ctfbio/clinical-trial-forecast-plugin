@@ -1,0 +1,15 @@
+{
+  "name": "clinical-trial-forecast",
+  "description": "The Clinical Trial Forecast plugin for Claude, published by CTFBio, LLC.",
+  "owner": {
+    "name": "CTFBio, LLC",
+    "url": "https://clinicaltrialforecast.com"
+  },
+  "plugins": [
+    {
+      "name": "clinical-trial-forecast",
+      "source": "./",
+      "description": "Study, scenario, biosample, workforce and public trial workflows for Clinical Trial Forecast."
+    }
+  ]
+}

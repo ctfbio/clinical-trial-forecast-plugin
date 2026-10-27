@@ -19,7 +19,10 @@ requires.
    connector. Eligibility is the same as the web application's; where a connection is refused for
    it, the refusal says so. Create the account, the organization and its subscription at
    https://app.clinicaltrialforecast.com/claude, which also shows when everything is ready.
-3. Nothing else. The plugin carries no credentials, no API key field, no background command and no
+3. Accept the current legal notice yourself in the web application. An earlier acceptance does not
+   cover a newer notice. The connector checks the current requirement during connection setup and
+   before every authenticated request, including an existing connection.
+4. Nothing else. The plugin carries no credentials, no API key field, no background command and no
    second service connection. There is nothing to paste into a configuration file.
 
 ## Connect in Claude Code
@@ -72,6 +75,17 @@ requires.
   that belongs to a different organization, so a missing record can mean the connection is bound to
   the wrong organization.
 
+## When the legal notice changes
+
+If the connector asks for current legal acceptance, open the web link in its refusal, review the
+notice, select the required checkboxes and choose **Agree and Continue** yourself. The plugin cannot
+accept for you. After acceptance, retry your request. An existing connection can continue without
+reconnecting; reconnect only if your sign-in expired or the client requires it. If initial connection
+setup was interrupted, follow the authorization page's return instructions and connect again.
+
+An unavailable legal-status check does not grant access. Wait and retry if the service reports that
+verification is temporarily unavailable.
+
 ## Data this connection carries
 
 - Study-level and aggregate operational records: studies, sites, budget scenarios, forecasts,
@@ -82,6 +96,12 @@ requires.
 - Claude reads documents you provide; only the structured values needed for a requested action are
   sent to the connector. Tool arguments and results are not sent to analytics or tracing systems.
 - No language model runs inside the connector. The reasoning stays in your Claude, on your plan.
+- Clearing or erasing workspace content happens only in the web application, by an organization
+  Admin; the connector has no tool for either. Clearing the planning data (optionally with the
+  stored files and the AI chat history) and the separate erasure of all workspace content act on the
+  web application's live content only. CTFBio cannot erase copies already held outside it, such as
+  results in your own AI client's conversations or memory and files you downloaded. Retention by
+  service providers and in backups is separate from both.
 
 ## Beta
 
@@ -96,7 +116,12 @@ should be checked before they are relied on for a planning decision.
   the areas you need.
 - **Remove:** disconnect the `ctf` server in the client, then uninstall the plugin; in claude.ai,
   remove the custom connector. Removing the plugin alone does not end an
-  authorization the client still holds.
+  authorization the client still holds. Removing the connection ends its authorization; results it
+  already returned stay in your client until you delete them there.
+- **While the workspace is being cleared:** during an organization Admin's clearing or erasure of
+  workspace content, the connector refuses every request with "The workspace is being cleared by an
+  organization Admin." The connection is not revoked. Retry once the cleanup has finished; reconnect
+  only if your client asks you to sign in again.
 
 ## Study configuration and environment
 
@@ -110,14 +135,19 @@ A custom connector supplies tools without these skills. In claude.ai, install th
 
 Results carry `app_url` values. Each one opens a page of Clinical Trial Forecast for a person signed in to the organization this connection belongs to: a record's `app_url` shows that record, and a result's top-level `app_url` shows the whole result, or the nearest page when the web application has no view of it. `null` means there is no page.
 
-- After answering, give links from those values so the person can open the same data in Clinical Trial Forecast. Label each link with what its page shows, from the table below, for example: Open the cumulative spend chart for ASCEND-1 (Budget and Latest Estimate).
+- After answering, give an **Open in CTFBio** link from the returned app_url so the person can open the same data. Label each link with what its page shows, from the table below, for example: Open the cumulative spend chart for ASCEND-1 (Budget and Latest Estimate).
 - When the page is only the nearest one (readiness, enrollment), say so, for example: Open ASCEND-1's budget overview.
 - Give at most five record links. For more records, give the result's top-level `app_url` instead. For a comparison, a curve, a schedule or a readiness answer, give the top-level `app_url`.
-- A comparison link overlays the first 3 compared scenarios; say so when more were compared.
+- A budget comparison link opens Budgets › Compare with up to eight returned scenarios preselected; the spend overlay shows up to 3.
 - In a terminal (Claude Code), write the full https:// address as plain text, never in backticks or a code block. Elsewhere a markdown link is fine.
+- Use returned `view_links` for related screens: whiteboard, schedule-costs (cost and quantity), vendors, systems and team. Label these Open in CTFBio followed by the view name. Keep the returned org context and query parameters intact.
 - Use only `app_url` values from results. Never build or edit a link.
 - If the page says the link belongs to a workspace the account is not a member of, the person is signed in to the web application with a different account than the one connected here.
 - When the person asks for a chart, you may draw one from the result's series, and also give the `app_url` of the maintained view.
+
+### Current legal notice
+
+If access is refused because the current legal notice needs acceptance, stop the workflow and give the person the web link supplied in the refusal. They must review and explicitly accept the notice themselves. Do not accept for them or retry protected operations until they have done so. After acceptance, retry the request; an existing connection can continue, with reconnection needed only if sign-in expired or the client requires it. If verification is unavailable, report that access remains blocked and retry later.
 
 ### What each link opens
 
@@ -132,7 +162,7 @@ Results carry `app_url` values. Each one opens a page of Clinical Trial Forecast
 | `/o/{organization}/billing` | The organization's subscription state and what an administrator can do about it |
 | `/o/{organization}/study/{key}` | The study's budget overview: Budget, Latest Estimate and Actual spend curves, milestones and breakdowns |
 | `/o/{organization}/study/{key}?view=compare&scenarios={key},{key}` | The study's cumulative spend chart with the compared scenarios overlaid, and the difference table |
-| `/o/{organization}/study/{key}?view=compare-costs` | Scenario cost comparison with drivers and currency basis |
+| `/o/{organization}/study/{key}?view=compare-costs` | Budgets › Compare with the compared scenarios selected, drivers and currency basis |
 | `/o/{organization}/study/{key}?view=compare-vendors` | Scenario vendor cost comparison |
 | `/o/{organization}/study/{key}?view=compare-systems` | Scenario system cost comparison |
 | `/o/{organization}/study/{key}?view=decisions` | Scenario decisions and recorded approvals |
@@ -144,6 +174,7 @@ Results carry `app_url` values. Each one opens a page of Clinical Trial Forecast
 | `/o/{organization}/study/{key}?view=design` | The study's schedule-of-activities grid |
 | `/o/{organization}/configuration/{key}` | The plan's budget overview and its milestones |
 | `/o/{organization}/configuration/{key}?view=design` | The plan's study design page: endpoints, interim timeline, intended-use coverage and the sample testing schedule chart |
+| `/o/{organization}/configuration/{key}?view=schedule-costs` | The plan schedule of activities in cost and quantity view |
 | `/o/{organization}/configuration/{key}?view=systems` | The plan's system roles and integration gaps |
 | `/o/{organization}/configuration/{key}?view=vendors` | The plan vendors and contract status |
 | `/o/{organization}/configuration/{key}?view=rules` | The plan calculation rules and consumers |
@@ -157,6 +188,7 @@ Results carry `app_url` values. Each one opens a page of Clinical Trial Forecast
 | `/o/{organization}/scenario/{key}?view=company` | The company plan by department, program and account |
 | `/o/{organization}/scenario/{key}?view=planner` | The resource planner under that plan |
 | `/o/{organization}/scenario/{key}?view=team` | Team under that plan |
+| `/o/{organization}/scenario/{key}?view=whiteboard` | The scenario whiteboard with study plans, vendors and samples |
 | `/o/{organization}/site/{key}` | The study's sites grid, at that site |
 | `/o/{organization}/partner/{key}` | The study's partners grid, at that partner |
 | `/o/{organization}/milestone/{key}` | The plan's milestones |
@@ -169,6 +201,19 @@ Results carry `app_url` values. Each one opens a page of Clinical Trial Forecast
 | `/o/{organization}/epoch/{key}` | The study epochs grid, at that epoch |
 | `/o/{organization}/visit/{key}` | The study visits grid, at that visit |
 | `/o/{organization}/schedule-activity/{key}` | The schedule-of-activities grid, at that entry |
+| `/o/{organization}/workforce-resource/{key}` | The exact workforce resource record |
+| `/o/{organization}/workforce-engagement/{key}` | The exact workforce engagement record |
+| `/o/{organization}/workforce-cost-term/{key}` | The exact workforce cost term record |
+| `/o/{organization}/workforce-allocation/{key}` | The exact workforce allocation record |
+| `/o/{organization}/protocol-version/{key}` | The exact protocol version record |
+| `/o/{organization}/biosample-plan/{key}` | The exact biosample plan record |
+| `/o/{organization}/kit/{key}` | The exact kit record |
+| `/o/{organization}/kit-configuration/{key}` | The exact kit configuration record |
+| `/o/{organization}/consent-template/{key}` | The exact consent template record |
+| `/o/{organization}/testing-policy/{key}` | The exact testing policy record |
+| `/o/{organization}/partner-rate-card/{key}` | The exact partner rate card record |
+| `/o/{organization}/partner-capacity/{key}` | The exact partner capacity record |
+| `/o/{organization}/capex-line/{key}` | The exact capex line record |
 | `/o/{organization}/changeset/{key}` | The changeset diff, affected plans and web approval |
 | `/o/{organization}/forecast-run/{key}` | The recalculation run and its stored totals |
 | `/o/{organization}/study-vendor/{key}` | The plan vendor scope |
