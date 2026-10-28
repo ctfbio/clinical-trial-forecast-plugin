@@ -33,14 +33,22 @@ requires.
 
 ## Connect in claude.ai
 
-1. Add a custom connector (Settings, Connectors, Add custom connector) with the address
-   `https://mcp.clinicaltrialforecast.com/mcp`, exactly as written, with no trailing slash. It is the
-   address this plugin registers, so a Claude Code session signed in to the same account sees one
-   set of these tools rather than two.
-2. On Team and Enterprise plans an Owner adds the connector for the organization first; members then
-   connect to it. On individual plans the member adds it.
-3. Connect, then enable the connector in the conversation that uses it.
-4. A custom connector brings the tools and their descriptions. The workflow skills in this plugin
+1. **Pro and Max plans:** open **Customize**, then **Connectors**. Click **+ Add**, then **Add custom
+   connector**. Enter a name for the connector and the remote MCP server URL
+   `https://mcp.clinicaltrialforecast.com/mcp`, exactly as written, with no trailing slash, then
+   click **Continue**. It is the address this plugin registers, so a Claude Code session signed in to
+   the same account sees one set of these tools rather than two.
+2. Review the detected authentication settings and click **Continue**. Under Authentication choose
+   **Sign in now** or **Sign in when needed**. Under OAuth client keep **Use Claude's published
+   identity (Recommended)**: the connector accepts that identity and offers no automatic
+   registration. Add no request headers; the connector takes no API key. Click **Add**.
+3. **Team and Enterprise plans:** an Owner adds the connector for the organization first, in
+   **Organization settings**, **Connectors**: click **Add**, hover over **Custom**, select **Web**,
+   and enter the same name, URL and authentication settings. Members then open **Customize**,
+   **Connectors**, find the connector (it usually carries a **Custom** label) and click **Connect**.
+4. Connect, then enable the connector in the conversation that uses it: the **+** button at the lower
+   left of the chat, then **Connectors**, and the connector's toggle.
+5. A custom connector brings the tools and their descriptions. The workflow skills in this plugin
    reach a claude.ai conversation only when the plugin itself is added to the account; each tool
    result is complete JSON either way.
 
@@ -115,7 +123,9 @@ should be checked before they are relied on for a planning decision.
 - **Different areas:** the granted areas are fixed for the life of a connection. Reconnect and check
   the areas you need.
 - **Remove:** disconnect the `ctf` server in the client, then uninstall the plugin; in claude.ai,
-  remove the custom connector. Removing the plugin alone does not end an
+  open **Customize**, **Connectors** and click **Remove** (or the three dots) next to the custom
+  connector; a Team or Enterprise Owner removes an organization's connector in **Organization
+  settings**, **Connectors**. Removing the plugin alone does not end an
   authorization the client still holds. Removing the connection ends its authorization; results it
   already returned stay in your client until you delete them there.
 - **While the workspace is being cleared:** during an organization Admin's clearing or erasure of
@@ -129,7 +139,7 @@ The server key is `ctf` on both channels. Read the environment line before prepa
 
 Every write uses preview, a visible diff, the user's change reason and the preview's minted key on apply. A protected change opens the web approval page; an org Admin may approve their own change unless the organization's four-eyes setting requires another Admin.
 
-A custom connector supplies tools without these skills. In claude.ai, install the private plugin through Customize → Plugins; a private GitHub marketplace requires the Claude GitHub App. Connect from the plugin's Connectors tab. Team/Enterprise Owners can set the plugin to Installed by default. The generated claude.ai skills bundle offers the same served workflows when installed as skills. Prompts are optional client features; skills remain the primary guidance on claude.ai.
+A custom connector supplies tools without these skills. In claude.ai, open **Customize** and the **Plugins** tab, click **Add**, select **Add marketplace**, choose **Add from a repository** and enter the marketplace's GitHub repository as owner/repo; then select the plugin and click **Add**. A private GitHub marketplace requires the Claude GitHub App. Connect from the plugin's Connectors tab. Team/Enterprise Owners can set the plugin to Installed by default. The generated claude.ai skills bundle offers the same served workflows when installed as skills. Prompts are optional client features; skills remain the primary guidance on claude.ai.
 
 ## Links to the web application
 

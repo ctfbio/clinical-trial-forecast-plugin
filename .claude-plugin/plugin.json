@@ -1,6 +1,6 @@
 {
   "name": "clinical-trial-forecast",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Study, scenario, biosample, workforce and public trial workflows for Clinical Trial Forecast.",
   "homepage": "https://clinicaltrialforecast.com",
   "author": {

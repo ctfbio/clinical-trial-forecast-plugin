@@ -47,22 +47,33 @@ the same name.
 2. `/plugin install clinical-trial-forecast@clinical-trial-forecast`
 3. Run `/mcp`, select the `ctf` server and authenticate.
 
-**claude.ai and Claude Desktop:**
+**claude.ai and Claude Desktop, the connector:**
 
-1. Settings → Connectors → Add custom connector. Name it `Clinical Trial Forecast` and set the
-   remote MCP server URL to `https://mcp.clinicaltrialforecast.com/mcp`, with no trailing slash.
-   Leave the advanced OAuth fields empty, then connect and approve the connection.
-2. Where plugins are available to the account: Customize → Plugins, add the marketplace
-   `ctfbio/clinical-trial-forecast-plugin` from GitHub, and install `clinical-trial-forecast`.
+1. Pro and Max plans: open **Customize**, then **Connectors**. Click **+ Add**, then **Add custom
+   connector**. Enter the name `Clinical Trial Forecast` and the remote MCP server URL
+   `https://mcp.clinicaltrialforecast.com/mcp`, with no trailing slash, and click **Continue**.
+2. Review the detected authentication settings and click **Continue**: Authentication **Sign in
+   now**, OAuth client **Use Claude's published identity (Recommended)**, no request headers. Click
+   **Add**, then **Connect**, sign in, choose the organization and approve.
+3. Team and Enterprise plans: an Owner first adds it in **Organization settings**, **Connectors**:
+   **Add**, hover over **Custom**, select **Web**, with the same name, URL and settings. Members
+   then open **Customize**, **Connectors**, find the connector and click **Connect**.
+
+**claude.ai and Claude Desktop, the plugin** (paid plans: Pro, Max, Team and Enterprise):
+
+1. Open **Customize** and the **Plugins** tab. Click **Add**, select **Add marketplace**, choose
+   **Add from a repository** and enter `ctfbio/clinical-trial-forecast-plugin`.
+2. Select the `clinical-trial-forecast` plugin and click **Add**.
 
 To update in Claude Code, run `/plugin marketplace update clinical-trial-forecast`. To remove,
-uninstall the plugin, remove the marketplace, and revoke the connection in Clinical Trial Forecast:
-removing a plugin does not end an authorization the client still holds.
+uninstall the plugin, remove the marketplace (in claude.ai, its menu button, then **Remove**), remove
+the custom connector (**Customize**, **Connectors**, **Remove**), and revoke the connection in
+Clinical Trial Forecast: removing a plugin does not end an authorization the client still holds.
 
 ## Prerequisites and connection
 
-The plugin requires Claude Code, Cowork, or claude.ai where plugins are available to the account,
-and an eligible Clinical Trial Forecast organization.
+The plugin requires Claude Code, Cowork, or claude.ai on a paid plan, and an eligible Clinical Trial
+Forecast organization.
 Installing it registers the bundled server; run `/mcp` to authenticate it. In claude.ai, the same
 server is added as a custom connector at the address below, with no trailing slash, so a Claude Code
 session on the same account sees one set of tools. Sign in to the application, select the intended
